@@ -16,4 +16,9 @@ Beyond notation of usage & how the resources accomplish the goal,
 highlight areas for improvement.
 Note: Organization & proper notation thereof is very important.
 
+- Usage:
+terraform init -> terraform plan -> terraform apply
 
+- Folders:
+stash:
+bits of code I made but am not *currently* using
