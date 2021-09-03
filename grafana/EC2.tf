@@ -16,8 +16,9 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
-
+  instance_type = "t2.micro"
+  iam_instance_profile = "EC2_PrometheusQueryRole"
+  key_name = "aci_dell"
   tags = {
     Name = "HelloWorld"
   }
@@ -25,8 +26,9 @@ resource "aws_instance" "web" {
 
 resource "aws_instance" "web2" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
-
+  instance_type = "t2.micro"
+  iam_instance_profile = "EC2_PrometheusQueryRole"
+  key_name = "aci_dell"
   tags = {
     Name = "HelloWorld2"
   }

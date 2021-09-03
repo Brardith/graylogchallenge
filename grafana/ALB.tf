@@ -1,3 +1,11 @@
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnet_ids" "default2" {
+  vpc_id = data.aws_vpc.default.id
+}
+
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
@@ -6,13 +14,8 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id             = "vpc-abcde012"
-  subnets            = ["subnet-abcde012", "subnet-bcde012a"]
-  security_groups    = ["sg-edcd9784", "sg-edcd9785"]
-
-  access_logs = {
-    bucket = "my-alb-logs"
-  }
+  vpc_id = data.aws_vpc.default.id
+  subnets = data.aws_subnet_ids.default2.ids
 
   target_groups = [
     {
@@ -22,12 +25,12 @@ module "alb" {
       target_type      = "instance"
       targets = [
         {
-          target_id = "i-0123456789abcdefg"
-          port = 80
+          target_id = aws_instance.web.id
+          port = 3000
         },
         {
-          target_id = "i-a1b2c3d4e5f6g7h8i"
-          port = 8080
+          target_id = aws_instance.web2.id
+          port = 3000
         }
       ]
     }
@@ -37,7 +40,7 @@ module "alb" {
     {
       port               = 443
       protocol           = "HTTPS"
-      certificate_arn    = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
+      certificate_arn    = "arn:aws:acm:us-east-1:158156967464:certificate/3a4328f2-c618-4ec6-b4c3-ee93726e07b0"
       target_group_index = 0
     }
   ]
