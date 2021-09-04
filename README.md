@@ -38,7 +38,7 @@ Note: Organization & proper notation thereof is very important.
 ## Usage:
 - I have the terraform folders broken out into units for ease of being able to create/destroy sections of the challenge, but they can all be piled into one directory and run via `terraform init` `terraform plan` `terraform apply -auto-approve`
 - that being said, the order in which I run the sections are: s3static -> CloudWatch -> Grafana.
-- Manually connect to the prometheus host and install: default-jre and maven. pull down the Cloudwatch Exporter for Prometheus from the above link, build it with `mvn package`, and run it with `java -jar target/cloudwatch_exporter-*-SNAPSHOT-jar-with-dependencies.jar 9106 example.yml` I have included my example config in the cloudwatchexporter directory.
+- Manually connect to the prometheus host and install: default-jre and maven. pull down the Cloudwatch Exporter for Prometheus from the above link, build it with `mvn package`, and run it with `java -jar target/cloudwatch_exporter-*-SNAPSHOT-jar-with-dependencies.jar 9106 example.yml &` I have included my example config in the cloudwatchexporter directory.
 - The ansible code should be run only when the CloudWatch and Grafana terraform instances are running, and once you've filled in the host data into the hosts file, and edited prometheus_playbook.yml and grafana_playbook.yml
 
 ## Known Limitations:
