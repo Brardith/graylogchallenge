@@ -20,16 +20,16 @@ module "alb" {
   target_groups = [
     {
       name_prefix      = "pref-"
-      backend_protocol = "HTTP"
-      backend_port     = 80
+      backend_protocol = "HTTPS"
+      backend_port     = 443
       target_type      = "instance"
       targets = [
         {
-          target_id = aws_instance.web.id
+          target_id = aws_instance.grafana01.id
           port = 3000
         },
         {
-          target_id = aws_instance.web2.id
+          target_id = aws_instance.grafana02.id
           port = 3000
         }
       ]
@@ -49,7 +49,12 @@ module "alb" {
     {
       port               = 80
       protocol           = "HTTP"
-      target_group_index = 0
+      action_type        = "redirect"
+      redirect = {
+        port	= "443"
+	protocol	= "HTTPS"
+	status_code	= "HTTP_301"
+      }
     }
   ]
 

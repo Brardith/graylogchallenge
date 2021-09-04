@@ -1,0 +1,4 @@
+#Install ansible-galaxy roles for grafana and prometheus. I am leaving at detaults, but I can change that very easily in the ~/.ansible folder
+- src: cloudalchemy.prometheus 
+
+- src: cloudalchemy.grafana

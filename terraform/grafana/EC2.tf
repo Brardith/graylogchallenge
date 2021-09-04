@@ -14,22 +14,32 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "grafana01" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   iam_instance_profile = "EC2_PrometheusQueryRole"
   key_name = "aci_dell"
   tags = {
-    Name = "HelloWorld"
+    Name = "Grafana01"
   }
 }
 
-resource "aws_instance" "web2" {
+resource "aws_instance" "grafana02" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   iam_instance_profile = "EC2_PrometheusQueryRole"
   key_name = "aci_dell"
   tags = {
-    Name = "HelloWorld2"
+    Name = "Grafana02"
+  }
+}
+
+resource "aws_instance" "prometheus01" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  iam_instance_profile = "EC2_CloudWatchFull"
+  key_name = "aci_dell"
+  tags = {
+    Name = "Prometheus01"
   }
 }

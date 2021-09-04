@@ -1,0 +1,18 @@
+---
+- hosts: all 
+  roles: 
+    - role: cloudalchemy.grafana
+      vars: 
+        grafana_security: 
+          admin_user: admin
+          admin_password: Access101$
+        grafana_datasources: 
+          name: prometheus
+          type: prometheus
+          access: proxy
+          url: 'http://3.86.143.245:3000'
+          basicAuth: false
+        grafana_dashboards: 
+          - dashboard_id: 13972
+            revision_id: 5
+            datasource: prometheus

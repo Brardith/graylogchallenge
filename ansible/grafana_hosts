@@ -1,0 +1,2 @@
+34.239.106.179	ansible_connection=ssh	ansible_user=ubuntu
+52.23.207.159	ansible_connection=ssh	ansible_user=ubuntu

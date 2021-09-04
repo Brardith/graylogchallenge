@@ -1,6 +1,6 @@
 # Brad Hull Graylog Challenge Code
 
-- Problem Statement:
+##Problem Statement:
 Within the span of a few hours, create a solution using Terraform,
 Ansible, & AWS to provision a load-balanced static HTML page whose
 metrics are collected by Prometheus & illustrated by Grafana.
@@ -16,9 +16,32 @@ Beyond notation of usage & how the resources accomplish the goal,
 highlight areas for improvement.
 Note: Organization & proper notation thereof is very important.
 
-- Usage:
-terraform init -> terraform plan -> terraform apply
+##Requirements
+- Terraform
+- AWSCLI installed and configured
+- Ansible
+- Ansible-Galaxy
+- jmespath (either in your pip or installed to the system)
+- Java 8 and Maven on the Prometheus host.
+- the cloudalchemy.prometheus and cloudalchemy.grafana ansible roles installed.
+- I used a purchased domain to test this, you need to have a domain available to run my code.
 
-- Folders:
-stash:
-bits of code I made but am not *currently* using
+##Architecture
+- I tried my best to go with as cloud-native an approach as I could. The end result is not the prettiest due to my unfamiliarity with some of the technology, but it's nothing that couldn't be ironed out by someone with more familiarity.
+- The static webpage is hosted in s3, one bucket for www.domain.com and one for domain.com, with a cloudfront handling caching and automatic redirects. Also included is the creation of an hosted zone and an SSL certificate. Metrics for this are sent to cloudwatch.
+- Prometheus is run on an EC2 instance, and also is running a copy of the Cloudwatch Exporter for Prometheus (https://github.com/prometheus/cloudwatch_exporter) on port 9106.
+- Grafana is run on two EC2 instances, and are behind an Application Load Balancer that also handles redirecting HTTP to HTTPS.
+- A mysql RDS is created for the two Grafana instances to store data in.
+
+##Usage:
+- I have the terraform folders broken out into units for ease of being able to create/destroy sections of the challenge, but they can all be piled into one directory and run via `terraform init` `terraform plan` `terraform apply -auto-approve`
+- that being said, the order in which I run the sections are: s3static -> CloudWatch -> Grafana.
+- Manually connect to the prometheus host and install: default-jre and maven. pull down the Cloudwatch Exporter for Prometheus from the above link, build it with `mvn package`, and run it with `java -jar target/cloudwatch_exporter-*-SNAPSHOT-jar-with-dependencies.jar 9106 example.yml` I have included my example config in the cloudwatchexporter directory.
+- The ansible code should be run only when the CloudWatch and Grafana terraform instances are running, and once you've filled in the host data into the hosts file, and edited prometheus_playbook.yml and grafana_playbook.yml
+
+##Known Limitations:
+- Cloudwatch configuration requires manual entry of the two CloudFront IDs. I could more than likely configure a datasource to pull those.
+- The cloudwatch exporter for prometheus is manually installed and configured.
+- Ansible playbooks and host files require editing to reflect IP addresses of hosts/servers.
+- In early testing the ALB wasn't preventing redirect loops, I assume because it wasn't handling the redirects itself. I've added HTTPS redirecting to the terraform config, but I can't guarantee it's foolproof.
+- I couldn't manage to get a shared database for the two Grafana hosts, so they're not technically HA, just two servers existing side by side under an LB. I have the terraform code create a database, but more troubleshooting is necessary for why grafana isn't playing nice with the DB. Perhaps pre-configuration of the database is in order? Or I can just build a sqlite host in EC2, but that goes against my attempt to make it as cloud-native as I could.
