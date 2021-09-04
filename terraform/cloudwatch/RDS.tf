@@ -1,3 +1,4 @@
+#creates a MYSQL RDB in AWS. pretty self-explanatory I think.
 resource "aws_db_instance" "graylogdb" {
   allocated_storage    = 10
   engine               = "mysql"

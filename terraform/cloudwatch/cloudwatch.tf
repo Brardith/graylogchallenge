@@ -1,3 +1,4 @@
+# this creates two dashboards, one for each of the two cloudfronts. this does require manual entry of the ID for each.
 resource "aws_cloudwatch_dashboard" "www-bds-code" {
   dashboard_name = "www-bds-code"
 

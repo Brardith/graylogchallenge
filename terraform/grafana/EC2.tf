@@ -1,3 +1,4 @@
+# This creates 3x EC2 instances using the Ubuntu AMI, free-tier t2.micro. The names are self explanatory.
 data "aws_ami" "ubuntu" {
   most_recent = true
 

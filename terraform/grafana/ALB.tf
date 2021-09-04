@@ -1,11 +1,16 @@
+#This creates an application load balancer across all subnets in the DEFAULT VPC, which is where I'm building my EC2 instances.
+
+# This datasource allows the default VPC to be queried.
 data "aws_vpc" "default" {
   default = true
 }
 
+# I then query the VPC so I can later pull out the subnet IDs.
 data "aws_subnet_ids" "default2" {
   vpc_id = data.aws_vpc.default.id
 }
 
+# this module builds an Application load balancer that does HTTPS redirection, using the SSL cert created earlier in the S3 stage. The ARN needs to be placed manually only because it's in a different folder from ACM.tf
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
