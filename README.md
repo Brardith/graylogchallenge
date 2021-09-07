@@ -47,6 +47,6 @@ Note: Organization & proper notation thereof is very important.
 - Cloudwatch configuration requires manual entry of the two CloudFront IDs. I could more than likely configure a datasource to pull those.
 - The cloudwatch exporter for prometheus is manually installed and configured. This can be scripted via ansible, but I was honestly just excited to get it running.
 - Ansible playbooks and host files require editing to reflect IP addresses of hosts/servers.
-- I'm going to apologize in advance for the jankineiss around Prometheus. I'm 100% unfamiliar with it, so it's very definitely the weakest part of this project.
+- I'm going to apologize in advance for the jankiness around Prometheus. I'm 100% unfamiliar with it, so it's very definitely the weakest part of this project.
 - In early testing the ALB wasn't preventing redirect loops, I assume because it wasn't handling the redirects itself. I've added HTTPS redirecting to the terraform config, but I can't guarantee it's foolproof.
 - I couldn't manage to get a shared database for the two Grafana hosts, so they're not technically HA, just two servers existing side by side under an LB. I have the terraform code create a database, but more troubleshooting is necessary for why grafana isn't playing nice with the DB. Perhaps pre-configuration of the database is in order? Or I can just build a sqlite host in EC2, but that goes against my attempt to make it as cloud-native as I could.
